@@ -276,3 +276,17 @@ footer{
 #menu_index{
 	background-color : #d1cd03;
 }
+
+/* Custom CSS to style the input field */
+.input-group-prepend .input-group-text {
+	background-color: #f0f0f0; /* Background color of the input group */
+}
+
+.input-group-prepend .input-group-text i {
+	color: #333; /* Icon color */
+}
+
+/* Style the input field */
+.form-control {
+	border-radius: 0 4px 4px 0; /* Rounded corners on the right side */
+}
