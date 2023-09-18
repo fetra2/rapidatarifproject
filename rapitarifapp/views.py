@@ -118,7 +118,7 @@ def index(request):
             'data': response_data,
             'message': error_message,
             'bureaux': response_data2,
-            'bureaux_requested': f"{bureauDepart} {depart} à {bureauArrive} {arrive}",
+            'bureaux_requested': f"{bureauDepart} à {bureauArrive}",
         }
         return render(request, 'index.html', context)
     else:
