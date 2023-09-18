@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <h2 class="mx-auto">SIMULER VOTRE TARIF</h2>
+        </div>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="Depart"><b>Départ</b></label>
+                    <input type="text" id="filter-input" placeholder="Filter bureaux">
+                    <select name="codeDepart" id="sortable-dropdown-depart" class="sortable-dropdown">
+                        <option value="">Select a bureau</option>
+                        {% for item in bureaux %}
+                            <option value="{{ item.codique }}-{{ item.nombureau }}">{{ item.nombureau }} {{ item.codique }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label for="Arrive"><b>Arrivé</b></label>
+                    <input type="text" id="filter-input-arrive" placeholder="Filter bureaux">
+                    <select name="codeArrive" id="sortable-dropdown-arrive" class="sortable-dropdown">
+                        <option value="">Select a bureau</option>
+                        {% for item in bureaux %}
+                            <option value="{{ item.codique }}-{{ item.nombureau }}">{{ item.nombureau }} {{ item.codique }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="pds"><b>Poids (kg)</b></label>
+                    <input type="text" class="form-control" placeholder="Entrer le poids" id="pds" name="pds" required>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="long"><b>Longueur (cm)</b></label>
+                    <input type="text" class="form-control" placeholder="Entrer la longueur" name="long">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="larg"><b>Largeur (cm)</b></label>
+                    <input type="text" class="form-control" placeholder="Entrer la largeur" name="larg">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="haut"><b>Hauteur (cm)</b></label>
+                    <input type="text" class="form-control" placeholder="Entrer la hauteur" name="haut">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" value="sqlserver" name="calculer">Calculer</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <style>
+        /* Add your CSS styles here */
+        .card {
+            background-color: #f0f0f0; /* Set the background color of the card */
+            padding: 10px; /* Add padding for spacing */
+            margin-bottom: 10px; /* Add margin to separate cards */
+        }
+    
+        .underline {
+            text-decoration: underline; /* Add underline style */
+        }
+    </style>
+    
+    <style>
+        /* Add your CSS styles here */
+        .card {
+            background-color: #f0f0f0; /* Set the background color of the card */
+            padding: 10px; /* Add padding for spacing */
+            margin-bottom: 10px; /* Add margin to separate cards */
+        }
+    
+        .label {
+            text-decoration: underline; /* Add underline style to labels */
+        }
+    </style>
+    
+    <style>
+        /* Add your CSS styles here */
+        .card {
+            background-color: #f0f0f0; /* Set the background color of the card */
+            padding: 10px; /* Add padding for spacing */
+            margin-bottom: 10px; /* Add margin to separate cards */
+        }
+    
+        .label {
+            text-decoration: underline; /* Add underline style to labels */
+        }
+    
+        .bold {
+            font-weight: bold; /* Add bold style to the last <p> element */
+        }
+    </style>
+    
+    {% if bureaux %}
+            <p><span class="label"></span></p>
+    {% endif %}
+    {% if poids %}
+    <div class="card">
+        {% if poidsreel %}
+            <p><span class="label">Poids réel:</span> {{ poidsreel }}</p>
+        {% endif %}
+        
+        {% if poidsvol %}
+            <p><span class="label">Poids volumétrique:</span> {{ poidsvol }}</p>
+        {% endif %}
+        
+        {% if poids %}
+            <p><span class="label">Poids retenu pour la tarification:</span> {{ poids }}</p>
+        {% endif %}
+        
+        {% if message %}
+            <p><span class="label">{{ message }}</span></p>
+        {% endif %}
+
+        
+        {% if datazone %}
+            {% if bureaux_requested %}
+                <p><span class="label">Déstination:</span> {{ bureaux_requested }}</p>
+            {% endif %}
+            <p><span class="label">Zone de tarification:</span> {{ datazone.0.zonemodifier }}</p>
+        {% endif %}
+        
+        {% if data %}
+            <p class="bold"><span class="label">Tarif:</span> {{ data.0.price }} Ariary</p>
+        {% endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock content %}
+{% block script %}
+<!-- Add these script tags to include jQuery and jQuery UI Sortable -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    // Your JavaScript code here
+    //alert('Hello, this is JavaScript inside a Django template!');
+</script>
+<script>
+    $(document).ready(function () {
+        var select = document.getElementById("sortable-dropdown-depart");
+        var options = select.getElementsByTagName("option");
+        var arr = Array.from(options).slice(1); // Exclude the first option ("Select a bureau")
+
+        // Second dropdown
+        var selectArrive = document.getElementById("sortable-dropdown-arrive");
+        var optionsArrive = selectArrive.getElementsByTagName("option");
+        var arrArrive = Array.from(optionsArrive).slice(1);
+
+        arr.sort(function (a, b) {
+            var textA = a.text.toUpperCase();
+            var textB = b.text.toUpperCase();
+            return textA.localeCompare(textB);
+        });
+        arrArrive.sort(function (a, b) {
+            var textA = a.text.toUpperCase();
+            var textB = b.text.toUpperCase();
+            return textA.localeCompare(textB);
+        });
+
+        // Remove existing options and add the sorted ones
+        /*while (select.firstChild) {
+            select.removeChild(select.firstChild);
+        }*/
+
+        arr.forEach(function (option) {
+            select.appendChild(option);
+        });
+
+
+        // Add an input event listener to filter options
+        $("#filter-input").on("input", function () {
+            var filterText = this.value.toUpperCase();
+            var temp = []
+            arr.forEach(function (option) {
+                var optionText = option.text.toUpperCase();
+                if (optionText.indexOf(filterText) > -1) {
+                    temp.push(option);
+                    option.style.display = "";
+                } else {
+                    option.style.display = "none";
+                }
+            });
+            for (const element of temp) { 
+                element.selected = true;
+                break;
+            }
+
+        });
+
+        // Add input event listener for the second input filter
+        $("#filter-input-arrive").on("input", function () {
+            var filterText = this.value.toUpperCase();
+            var temp = []
+            arrArrive.forEach(function (option) {
+                var optionText = option.text.toUpperCase();
+                if (optionText.indexOf(filterText) > -1) {
+                    temp.push(option);
+                    option.style.display = "";
+                } else {
+                    option.style.display = "none";
+                }
+            });
+            for (const element of temp) { 
+                element.selected = true;
+                break;
+            }
+        });
+    });
+</script>
+
+
+{% endblock %}
