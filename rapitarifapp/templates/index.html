@@ -15,9 +15,9 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="Depart"><b>Départ</b></label>
-                    <input type="text" id="filter-input" placeholder="Filter bureaux">
+                    <input type="text" id="filter-input" placeholder="Filtre bureaux">
                     <select name="codeDepart" id="sortable-dropdown-depart" class="sortable-dropdown">
-                        <option value="">Select a bureau</option>
+                        <option value="">Choisir une agence</option>
                         {% for item in bureaux %}
                             <option value="{{ item.codique }}-{{ item.nombureau }}">{{ item.nombureau }} {{ item.codique }}</option>
                         {% endfor %}
@@ -26,10 +26,10 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="Arrive"><b>Arrivé</b></label>
-                    <input type="text" id="filter-input-arrive" placeholder="Filter bureaux">
+                    <label for="Arrive"><b>Arrivée</b></label>
+                    <input type="text" id="filter-input-arrive" placeholder="Filtre bureaux">
                     <select name="codeArrive" id="sortable-dropdown-arrive" class="sortable-dropdown">
-                        <option value="">Select a bureau</option>
+                        <option value="">Choisir une agence</option>
                         {% for item in bureaux %}
                             <option value="{{ item.codique }}-{{ item.nombureau }}">{{ item.nombureau }} {{ item.codique }}</option>
                         {% endfor %}
@@ -164,7 +164,7 @@
     $(document).ready(function () {
         var select = document.getElementById("sortable-dropdown-depart");
         var options = select.getElementsByTagName("option");
-        var arr = Array.from(options).slice(1); // Exclude the first option ("Select a bureau")
+        var arr = Array.from(options).slice(1); // Exclude the first option ("Choisir une agence")
 
         // Second dropdown
         var selectArrive = document.getElementById("sortable-dropdown-arrive");
